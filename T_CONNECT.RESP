@@ -1,0 +1,12 @@
+;параметры:  address (число)
+
+;0 varset last_sent
+;0 varset last_received
+0 varset last_sent_data
+0 varset last_received_data
+
+$last_sent + 1 varset last_sent
+2 1 1 $last_sent 1 bufferit package_buffer
+calccrc pac_crc $package_buffer
+sizeof(package_buffer)+1 $package_buffer sizeof(package_buffer) $pac_crc 1 bufferit package_buffer_out 
+N_DATAGRAM.REQ senddown address $address userdata $package_buffer_out

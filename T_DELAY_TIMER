@@ -1,0 +1,13 @@
+0 varset delay_timer
+if qcount(package_queue) == 0 done
+; else send
+send:
+  ;out "GAVNO"
+  ;out qcount(package_queue)
+  dequeue(package_queue) varset package_buffer_out
+  ;out sizeof(package_buffer_out)
+  ;N_DATAGRAM.REQ senddown address $address userdata peek(package_queue)
+  N_DATAGRAM.REQ senddown address $address userdata $package_buffer_out
+  T_DELAY_TIMER $timeout_delay address $address timeevent delay_timer 
+  goto done
+done:

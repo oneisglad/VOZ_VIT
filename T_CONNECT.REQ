@@ -1,0 +1,23 @@
+;параметры:  address (число)
+0 varset last_sent
+0 varset last_received
+0 varset last_sent_data
+0 varset last_received_data
+50 varset timeout_connect
+10 varset timeout_delay 
+5 varset connect_try 
+
+
+
+$address varset t_address
+$last_sent + 1 varset last_sent
+2 0 1 $last_sent 1 bufferit package_buffer
+calccrc pac_crc $package_buffer
+sizeof(package_buffer)+1 $package_buffer sizeof(package_buffer) $pac_crc 1 bufferit package_buffer_out 
+N_DATAGRAM.REQ senddown address $address userdata $package_buffer_out 
+N_DATAGRAM.REQ senddown address $address userdata $package_buffer_out 
+;N_DATAGRAM.REQ senddown address $address userdata $package_buffer_out 
+
+
+CONNECT  $timeout_connect timeevent con_try 
+T_DELAY_TIMER $timeout_delay  address $address timeevent delay_timer
