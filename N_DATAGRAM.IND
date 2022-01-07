@@ -1,0 +1,35 @@
+;параметры:  address (число), userdata (буфер)
+connect if sizeof(userdata) == 1
+goto data
+
+connect:
+type 1 unpack userdata
+connect_ind if ($type == 1) && ($state == 0);
+connect_conf if ($type == 2) && ($state == 1)
+disconnect_ind if $type == 3
+goto end
+
+connect_ind:
+4 setto state
+up address $address T_CONNECT.IND
+goto end
+
+connect_conf:
+2 setto state
+up address $address T_CONNECT.CONF
+goto end
+
+disconnect_ind:
+0 setto state
+up address $address T_DISCONNECT.IND
+goto end
+
+data:
+6 setto state
+number 1 current_buf sizeof(userdata) - 1 unpack userdata
+end if $number <= $ext_count
+$number setto ext_count
+up userdata $current_buf T_DATA.IND
+goto end
+
+end:

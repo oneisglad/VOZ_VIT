@@ -1,0 +1,22 @@
+type_1 if ($timer_type == 1) && ($state == 1)
+type_2 if ($timer_type == 2) && ($state == 5)
+type_3 if $timer_type == 3
+goto end
+
+type_1:
+N_DATAGRAM.REQ down address $address userdata 1
+address $address timer_type 1 20 timeevent current_timer T_TIMER
+goto end
+
+type_2:
+N_DATAGRAM.REQ down address $address userdata 2
+address $address timer_type 2 20 timeevent current_timer T_TIMER
+goto end
+
+type_3:
+N_DATAGRAM.REQ down address $address userdata $userdata
+number 1 current_buf sizeof(userdata) - 1 unpack userdata
+end if ($number < $in_count) || ($in_count == 100)
+address $address userdata $userdata timer_type 3 10 timeevent current_timer T_TIMER
+
+end:
