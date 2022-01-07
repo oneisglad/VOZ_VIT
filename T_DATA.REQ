@@ -1,0 +1,7 @@
+;параметры:   userdata (буфер)
+
+3 setto state
+$in_count + 1 setto in_count
+current_buf sizeof(userdata) + 1 buffer $in_count 1 $userdata sizeof(userdata)
+N_DATAGRAM.REQ down address $address userdata $current_buf
+address $address userdata $current_buf timer_type 3 10 timeevent current_timer T_TIMER

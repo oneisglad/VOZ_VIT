@@ -1,0 +1,4 @@
+;параметры:  address (число)
+
+0 setto state
+N_DATAGRAM.REQ down address $address userdata 3
